@@ -20,6 +20,7 @@
   --color-rays: #e0aaff;
   --color-ground: #ffd97d;
   --color-labels: #ffffff;
+  --color-coords: #f43f5e;
   
   --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -85,11 +86,52 @@ body {
   padding-bottom: 0.5rem;
 }
 
+.header-main-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
 .header-logo {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   color: var(--primary);
+}
+
+.lang-switch-container {
+  display: flex;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 2px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.lang-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.lang-btn:hover {
+  color: var(--text-primary);
+}
+
+.lang-btn.active {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
 }
 
 .header-logo svg {
@@ -464,6 +506,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .checkbox-custom.rays { border-left: 3px solid var(--color-rays); }
 .checkbox-custom.ground { border-left: 3px solid var(--color-ground); }
 .checkbox-custom.labels { border-left: 3px solid var(--color-labels); }
+.checkbox-custom.coords { border-left: 3px solid var(--color-coords); }
 
 /* Highlight Card & Legend */
 .highlight-card {
@@ -528,6 +571,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .wireframe-dot { background-color: var(--color-wireframe); box-shadow: 0 0 4px var(--color-wireframe); }
 .hidden-dot { background-color: rgba(99, 102, 241, 0.35); border: 1px dashed rgba(0, 255, 135, 0.6); box-shadow: 0 0 4px rgba(99, 102, 241, 0.3); }
 .rays-dot { background-color: var(--color-rays); box-shadow: 0 0 4px var(--color-rays); }
+.coords-dot { background-color: var(--color-coords); box-shadow: 0 0 4px var(--color-coords); }
 
 /* Footer */
 .app-footer {

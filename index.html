@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,21 +8,32 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Outfit:wght@300;400;600;800&display=swap"
+    rel="stylesheet">
   <!-- Stylesheets -->
   <link rel="stylesheet" href="styles.css?v=10">
 </head>
+
 <body>
   <div class="app-container">
     <header class="app-header">
-      <div class="header-logo">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M21 21L12 12M12 12L3 21M12 12V3M12 12H21M12 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
-        </svg>
-        <h1>Perspective<span>Lab</span></h1>
+      <div class="header-main-row">
+        <div class="header-logo">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 21L12 12M12 12L3 21M12 12V3M12 12H21M12 12H3" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" />
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+          </svg>
+          <h1>DrawingPerspective<span>Lab</span></h1>
+        </div>
+        <div class="lang-switch-container">
+          <button class="lang-btn active" id="btn-lang-en">EN</button>
+          <button class="lang-btn" id="btn-lang-zh">中</button>
+        </div>
       </div>
-      <p class="header-subtitle">Interact with 3D space to understand how 1-point, 2-point, and 3-point perspective projection works.</p>
+      <p class="header-subtitle" id="header-subtitle">Interact with 3D space to understand how 1-point, 2-point, and
+        3-point perspective projection works.</p>
     </header>
 
     <main class="app-layout">
@@ -31,14 +43,15 @@
         <div class="card canvas-card" id="setup-card">
           <div class="card-header">
             <div class="card-title-group">
-              <span class="badge badge-primary">3D Setup</span>
-              <h2>Spatial Relationship View</h2>
+              <span class="badge badge-primary" id="setup-badge">3D Setup</span>
+              <h2 id="setup-title">Spatial Relationship View</h2>
             </div>
-            <p class="card-description">Rotate/drag to see the observer's eye, drawing plane, object, and projection rays.</p>
+            <p class="card-description" id="setup-desc">Rotate/drag to see the observer's eye, drawing plane, object,
+              and projection rays.</p>
           </div>
           <div class="canvas-wrapper">
             <canvas id="setup-canvas"></canvas>
-            <div class="canvas-overlay-hint">Drag to orbit scene</div>
+            <div class="canvas-overlay-hint" id="setup-hint">Drag to orbit scene</div>
           </div>
         </div>
 
@@ -46,10 +59,11 @@
         <div class="card canvas-card" id="perspective-card">
           <div class="card-header">
             <div class="card-title-group">
-              <span class="badge badge-success">2D Canvas</span>
-              <h2>Perspective Drawing View</h2>
+              <span class="badge badge-success" id="persp-badge">2D Canvas</span>
+              <h2 id="persp-title">Perspective Drawing View</h2>
             </div>
-            <p class="card-description">The picture plane as drawn. Receding lines converge toward vanishing points.</p>
+            <p class="card-description" id="persp-desc">The picture plane as drawn. Receding lines converge toward
+              vanishing points.</p>
           </div>
           <div class="canvas-wrapper">
             <canvas id="perspective-canvas"></canvas>
@@ -61,11 +75,11 @@
       <aside class="controls-sidebar">
         <!-- Configuration Card -->
         <div class="card">
-          <h3>Interactive Controls</h3>
-          
+          <h3 id="controls-title">Interactive Controls</h3>
+
           <!-- Object Selection -->
           <div class="control-group">
-            <label for="object-select">Choose Object</label>
+            <label for="object-select" id="label-object-select">Choose Object</label>
             <div class="select-wrapper">
               <select id="object-select">
                 <option value="cube" selected>1. Cube</option>
@@ -81,7 +95,7 @@
 
           <!-- Presets -->
           <div class="control-group">
-            <label>Perspective Presets</label>
+            <label id="label-presets">Perspective Presets</label>
             <div class="button-grid">
               <button id="btn-1pt" class="btn btn-preset active">1-Point</button>
               <button id="btn-2pt" class="btn btn-preset">2-Point</button>
@@ -94,7 +108,7 @@
           <!-- Camera Adjustments -->
           <div class="control-group">
             <div class="slider-header">
-              <label for="slider-yaw">Camera Rotation (Yaw)</label>
+              <label for="slider-yaw" id="label-yaw">Camera Rotation (Yaw)</label>
               <span class="slider-val" id="val-yaw">0°</span>
             </div>
             <input type="range" id="slider-yaw" min="-180" max="180" value="0" step="1">
@@ -102,7 +116,7 @@
 
           <div class="control-group">
             <div class="slider-header">
-              <label for="slider-pitch">Camera Pitch</label>
+              <label for="slider-pitch" id="label-pitch">Camera Pitch</label>
               <span class="slider-val" id="val-pitch">0°</span>
             </div>
             <input type="range" id="slider-pitch" min="-85" max="85" value="0" step="1">
@@ -110,7 +124,7 @@
 
           <div class="control-group">
             <div class="slider-header">
-              <label for="slider-height">Camera Height</label>
+              <label for="slider-height" id="label-height">Camera Height</label>
               <span class="slider-val" id="val-height">1.0</span>
             </div>
             <input type="range" id="slider-height" min="-5" max="5" value="1.0" step="0.1">
@@ -118,7 +132,7 @@
 
           <div class="control-group">
             <div class="slider-header">
-              <label for="slider-distance">Camera Distance</label>
+              <label for="slider-distance" id="label-distance">Camera Distance</label>
               <span class="slider-val" id="val-distance">12.0</span>
             </div>
             <input type="range" id="slider-distance" min="1" max="25" value="12.0" step="0.5">
@@ -126,7 +140,7 @@
 
           <div class="control-group">
             <div class="slider-header">
-              <label for="slider-fov">Field of View / Zoom</label>
+              <label for="slider-fov" id="label-fov">Field of View / Zoom</label>
               <span class="slider-val" id="val-fov">3.0</span>
             </div>
             <input type="range" id="slider-fov" min="0.5" max="6.0" value="3.0" step="0.1">
@@ -135,43 +149,49 @@
 
         <!-- Visibility Toggles -->
         <div class="card">
-          <h3>Display Layer Toggles</h3>
-          
+          <h3 id="toggles-title">Display Layer Toggles</h3>
+
           <div class="checkbox-grid">
             <label class="checkbox-label">
               <input type="checkbox" id="chk-horizon" checked>
               <span class="checkbox-custom horizon"></span>
-              Horizon Line
+              <span id="lbl-horizon">Horizon Line</span>
             </label>
 
             <label class="checkbox-label">
               <input type="checkbox" id="chk-vanishing" checked>
               <span class="checkbox-custom vanishing"></span>
-              Vanishing Points
+              <span id="lbl-vanishing">Vanishing Points</span>
             </label>
 
             <label class="checkbox-label">
               <input type="checkbox" id="chk-orthogonals" checked>
               <span class="checkbox-custom orthogonals"></span>
-              Receding Guides
+              <span id="lbl-orthogonals">Receding Guides</span>
             </label>
 
             <label class="checkbox-label">
               <input type="checkbox" id="chk-rays" checked>
               <span class="checkbox-custom rays"></span>
-              3D Projection Rays
+              <span id="lbl-rays">3D Projection Rays</span>
             </label>
 
             <label class="checkbox-label">
               <input type="checkbox" id="chk-ground" checked>
               <span class="checkbox-custom ground"></span>
-              Ground Plane/Grid
+              <span id="lbl-ground">Ground Plane/Grid</span>
             </label>
 
             <label class="checkbox-label">
               <input type="checkbox" id="chk-labels" checked>
               <span class="checkbox-custom labels"></span>
-              Text Annotations
+              <span id="lbl-labels">Text Annotations</span>
+            </label>
+
+            <label class="checkbox-label">
+              <input type="checkbox" id="chk-coords">
+              <span class="checkbox-custom coords"></span>
+              <span id="lbl-coords">Show Coordinates</span>
             </label>
           </div>
         </div>
@@ -181,26 +201,36 @@
           <div class="explainer-mode-badge" id="explainer-type-badge">2-Point Perspective</div>
           <h4 id="explainer-title">Two-Point Perspective</h4>
           <p id="explainer-text" class="explainer-description">
-            Looking at the object from an angle while the camera remains level creates two vanishing points on the horizon line. Vertical lines remain parallel.
+            Looking at the object from an angle while the camera remains level creates two vanishing points on the
+            horizon line. Vertical lines remain parallel.
           </p>
           <div class="legend-box">
-            <div class="legend-item"><span class="color-dot horizon-dot"></span> Horizon Line (Eye Level)</div>
-            <div class="legend-item"><span class="color-dot vanishing-dot"></span> Vanishing Points (V1, V2, V3)</div>
-            <div class="legend-item"><span class="color-dot orthogonals-dot"></span> Receding Orthogonals</div>
-            <div class="legend-item"><span class="color-dot wireframe-dot"></span> Visible Surfaces & Edges (Front)</div>
-            <div class="legend-item"><span class="color-dot hidden-dot"></span> Hidden Surfaces & Edges (Back)</div>
-            <div class="legend-item"><span class="color-dot rays-dot"></span> Sight Rays (3D view)</div>
+            <div class="legend-item"><span class="color-dot horizon-dot"></span> <span id="leg-horizon">Horizon Line
+                (Eye Level)</span></div>
+            <div class="legend-item"><span class="color-dot vanishing-dot"></span> <span id="leg-vanishing">Vanishing
+                Points (V1, V2, V3)</span></div>
+            <div class="legend-item"><span class="color-dot orthogonals-dot"></span> <span id="leg-orthogonals">Receding
+                Orthogonals</span></div>
+            <div class="legend-item"><span class="color-dot wireframe-dot"></span> <span id="leg-wireframe">Visible
+                Surfaces & Edges (Front)</span></div>
+            <div class="legend-item"><span class="color-dot hidden-dot"></span> <span id="leg-hidden">Hidden Surfaces &
+                Edges (Back)</span></div>
+            <div class="legend-item"><span class="color-dot rays-dot"></span> <span id="leg-rays">Sight Rays (3D
+                view)</span></div>
+            <div class="legend-item"><span class="color-dot coords-dot"></span> <span id="leg-coords">Vertex Coordinates (x, y)</span></div>
           </div>
         </div>
       </aside>
     </main>
 
     <footer class="app-footer">
-      <p>&copy; 2026 PerspectiveLab. Interactive Geometry & Perspective Theory Explainer. Author: Rolland Luo (<a href="mailto:rolland.online@gmail.com">rolland.online@gmail.com</a>)</p>
+      <p id="footer-text">&copy; 2026 DrawingPerspectiveLab. Interactive Geometry & Perspective Theory Explainer.
+        Author: Rolland Luo (<a href="mailto:rolland.online@gmail.com">rolland.online@gmail.com</a>)</p>
     </footer>
   </div>
 
   <!-- Javascript Core -->
   <script src="app.js?v=20"></script>
 </body>
+
 </html>

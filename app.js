@@ -63,6 +63,144 @@ const setupDistance = 15.0;
 // Configurable constants
 const PP_HEIGHT = 0.65; // Drawing plane visual half-height (controls overall scale)
 
+// ==========================================
+// Localization & Translation Dictionary
+// ==========================================
+let currentLang = localStorage.getItem('perspective_lab_lang') || 'en';
+
+const TRANSLATIONS = {
+  en: {
+    title: "Interactive Perspective Drawing Explainer",
+    subtitle: "Interact with 3D space to understand how 1-point, 2-point, and 3-point perspective projection works.",
+    setupBadge: "3D Setup",
+    setupTitle: "Spatial Relationship View",
+    setupDesc: "Rotate/drag to see the observer's eye, drawing plane, object, and projection rays.",
+    setupHint: "Drag to orbit scene",
+    perspBadge: "2D Canvas",
+    perspTitle: "Perspective Drawing View",
+    perspDesc: "The picture plane as drawn. Receding lines converge toward vanishing points.",
+    controlsTitle: "Interactive Controls",
+    labelChooseObject: "Choose Object",
+    objectCube: "1. Cube",
+    objectChair: "2. Armchair",
+    objectHouse: "3. Simplified House",
+    objectColumn: "4. Cylinder",
+    objectPrism: "5. Prism",
+    objectRailroad: "6. Railroad Track",
+    objectStairs: "7. Staircase",
+    labelPresets: "Perspective Presets",
+    btn1pt: "1-Point",
+    btn2pt: "2-Point",
+    btn3pt: "3-Point",
+    labelYaw: "Camera Rotation (Yaw)",
+    labelPitch: "Camera Pitch",
+    labelHeight: "Camera Height",
+    labelDistance: "Camera Distance",
+    labelFov: "Field of View / Zoom",
+    togglesTitle: "Display Layer Toggles",
+    lblHorizon: "Horizon Line",
+    lblVanishing: "Vanishing Points",
+    lblOrthogonals: "Receding Guides",
+    lblRays: "3D Projection Rays",
+    lblGround: "Ground Plane/Grid",
+    lblLabels: "Text Annotations",
+    lblCoords: "Show Coordinates",
+    legHorizon: "Horizon Line (Eye Level)",
+    legVanishing: "Vanishing Points (V1, V2, V3)",
+    legOrthogonals: "Receding Orthogonals",
+    legWireframe: "Visible Surfaces & Edges (Front)",
+    legHidden: "Hidden Surfaces & Edges (Back)",
+    legRays: "Sight Rays (3D view)",
+    legCoords: "Vertex Coordinates (x, y)",
+    footerText: "© 2026 DrawingPerspectiveLab. Interactive Geometry & Perspective Theory Explainer. Author: Rolland Luo (<a href=\"mailto:rolland.online@gmail.com\">rolland.online@gmail.com</a>)",
+
+    explainer1ptBadge: "1-Point Perspective",
+    explainer1ptTitle: "One-Point Perspective",
+    explainer1ptText: "The camera is level (pitch = 0°) and aligned perpendicular to one set of faces of the cube (yaw = 0° or 90°). Only one vanishing point exists, located at the center of vision. Horizontal and vertical lines remain perfectly parallel to the drawing plane and never converge.",
+    explainer2ptBadge: "2-Point Perspective",
+    explainer2ptTitle: "Two-Point Perspective",
+    explainer2ptText: "The camera is level (pitch = 0°) but rotated at an angle around the object (yaw is non-zero). Two vanishing points appear on the horizon line (representing depth and width lines converging). Vertical lines remain parallel and straight.",
+    explainer3ptBadge: "3-Point Perspective",
+    explainer3ptTitle: "Three-Point Perspective",
+    explainer3ptText: "The camera is looking up or down (pitch is non-zero) and rotated around the object. All three sets of parallel lines (width, height, depth) are oblique to the picture plane, and each converges to a separate vanishing point (V1, V2, and a vertical V3).",
+
+    canvasDrawingPlane: "Drawing Plane",
+    canvasObserver: "Observer (Eye)",
+    canvasHorizonLabel: "HORIZON (EYE LEVEL)",
+    vpLabelX: "Vx (X-Axis)",
+    vpLabelY: "Vy (Y-Axis)",
+    vpLabelZ: "Vz (Z-Axis)",
+    directionArrowX: "X direction ➔",
+    directionArrowY: "Y direction ➔",
+    directionArrowZ: "Z direction ➔"
+  },
+  zh: {
+    title: "绘画透视互动解析工具 (DrawingPerspectiveLab)",
+    subtitle: "通过在 3D 空间中进行交互，理解单点透视、两点透视及三点透视投影的原理。",
+    setupBadge: "3D 空间设置",
+    setupTitle: "空间关系视图",
+    setupDesc: "旋转/拖拽以观察观察者眼睛、投影面（画面）、物体和视线投影射线。",
+    setupHint: "拖拽以旋转场景",
+    perspBadge: "2D 画面效果",
+    perspTitle: "透视绘制视图",
+    perspDesc: "实际绘制出的投影面画面。平行线向灭点收缩汇聚。",
+    controlsTitle: "交互式控制面板",
+    labelChooseObject: "选择物体",
+    objectCube: "1. 立方体",
+    objectChair: "2. 扶手椅",
+    objectHouse: "3. 简易房屋",
+    objectColumn: "4. 圆柱体",
+    objectPrism: "5. 三棱柱",
+    objectRailroad: "6. 铁轨",
+    objectStairs: "7. 楼梯",
+    labelPresets: "透视模式预设",
+    btn1pt: "单点透视",
+    btn2pt: "两点透视",
+    btn3pt: "三点透视",
+    labelYaw: "相机水平旋转 (Yaw)",
+    labelPitch: "相机垂直俯仰 (Pitch)",
+    labelHeight: "相机高度",
+    labelDistance: "相机距离",
+    labelFov: "镜头视场/缩放",
+    togglesTitle: "显示图层开关",
+    lblHorizon: "地平线",
+    lblVanishing: "灭点",
+    lblOrthogonals: "透视引导线",
+    lblRays: "3D 视线投影",
+    lblGround: "地面网格",
+    lblLabels: "文字标注",
+    lblCoords: "显示坐标",
+    legHorizon: "地平线 (视平线)",
+    legVanishing: "灭点 (Vx, Vy, Vz)",
+    legOrthogonals: "透视收缩线",
+    legWireframe: "可见表面与边缘 (正面)",
+    legHidden: "隐藏表面与边缘 (背面)",
+    legRays: "视线/射线 (3D 视图)",
+    legCoords: "顶点坐标 (x, y)",
+    footerText: "© 2026 DrawingPerspectiveLab. 交互式几何与绘画透视原理学习工具。作者: 山风在线 (<a href=\"mailto:rolland.online@gmail.com\">rolland.online@gmail.com</a>)",
+
+    explainer1ptBadge: "单点透视",
+    explainer1ptTitle: "单点透视（平行透视）",
+    explainer1ptText: "相机处于水平状态（俯仰角为 0°），且视线垂直于立方体的一个面（偏航角为 0° 或 90°）。此时仅存在一个灭点，位于视中心。画面中的水平线和垂直线仍与投影面保持平行，永不相交。",
+    explainer2ptBadge: "两点透视",
+    explainer2ptTitle: "两点透视（成角透视）",
+    explainer2ptText: "相机处于水平状态（俯仰角为 0°），但绕着物体旋转了角度（偏航角非 0°）。地平线上会出现两个灭点（分别代表物体的宽度方向和深度方向的线条汇聚）。画面中的垂直线依然保持平行竖直。",
+    explainer3ptBadge: "三点透视",
+    explainer3ptTitle: "三点透视（斜角透视）",
+    explainer3ptText: "相机向上或向下倾斜（俯仰角非 0°），且绕着物体旋转。此时物体的三组平行线（宽度、高度、深度）均与投影面倾斜，各自收缩汇聚于独立的灭点（Vx、Vz 以及垂直方向的 Vy）。",
+
+    canvasDrawingPlane: "投影面 (画面)",
+    canvasObserver: "观察者 (视点)",
+    canvasHorizonLabel: "地平线 (视平线)",
+    vpLabelX: "Vx (X轴灭点)",
+    vpLabelY: "Vy (Y轴灭点)",
+    vpLabelZ: "Vz (Z轴灭点)",
+    directionArrowX: "X 轴方向 ➔",
+    directionArrowY: "Y 轴方向 ➔",
+    directionArrowZ: "Z 轴方向 ➔"
+  }
+};
+
 // DOM Elements
 const setupCanvas = document.getElementById('setup-canvas');
 const perspectiveCanvas = document.getElementById('perspective-canvas');
@@ -105,15 +243,15 @@ const OBJECTS = {
       new Vector3(0.75, 0.0, -0.75),  // 1: FR foot
       new Vector3(0.75, 0.0, 0.75),   // 2: BR foot
       new Vector3(-0.75, 0.0, 0.75),  // 3: BL foot
-      
+
       new Vector3(-0.75, 0.7, -0.75), // 4: Seat FL
       new Vector3(0.75, 0.7, -0.75),  // 5: Seat FR
       new Vector3(0.75, 0.7, 0.75),   // 6: Seat BR
       new Vector3(-0.75, 0.7, 0.75),  // 7: Seat BL
-      
+
       new Vector3(-0.75, 1.5, 0.75),  // 8: Backrest TL
       new Vector3(0.75, 1.5, 0.75),   // 9: Backrest TR
-      
+
       new Vector3(-0.75, 1.0, -0.75), // 10: Armrest FL
       new Vector3(0.75, 1.0, -0.75),  // 11: Armrest FR
       new Vector3(-0.75, 1.0, 0.75),  // 12: Armrest BL (junction)
@@ -162,7 +300,7 @@ const OBJECTS = {
       new Vector3(-0.75, 1.0, 0.75),  // 7: Top Wall BL
       new Vector3(0.0, 1.6, -0.75),   // 8: Roof ridge Front
       new Vector3(0.0, 1.6, 0.75),    // 9: Roof ridge Back
-      
+
       // Door (on Front Wall, Z = -0.75)
       new Vector3(-0.2, 0.0, -0.75),  // 10: Door Bottom-Left
       new Vector3(-0.2, 0.6, -0.75),  // 11: Door Top-Left
@@ -473,7 +611,8 @@ const layers = {
   orthogonals: true,
   rays: true,
   ground: true,
-  labels: true
+  labels: true,
+  coords: false
 };
 
 // ==========================================
@@ -497,7 +636,7 @@ function updateCameraBasis() {
 
   // Target Y is offset by the pitch orbit contribution, looking at ground level (relative to eye.y)
   const target = new Vector3(0, camera.height + camera.distance * sinPitch, 0);
-  
+
   // Camera height eye.y is exactly camera.height
   eye = new Vector3(
     camera.distance * cosPitch * sinYaw,
@@ -507,11 +646,11 @@ function updateCameraBasis() {
 
   // Gaze vector
   N = target.sub(eye).normalize();
-  
+
   // Right vector (perpendicular to up vector [0, 1, 0] and look direction N)
   const upRef = new Vector3(0, 1, 0);
   R = N.cross(upRef).normalize();
-  
+
   // Real camera up vector
   U = R.cross(N).normalize();
 }
@@ -553,19 +692,19 @@ function projectDirection(dir, W, H) {
     d = dir.scale(-1);
     dot = -dot;
   }
-  
+
   if (dot < 1e-4) {
     return { infinite: true };
   }
-  
+
   const xc = d.dot(R);
   const yc = d.dot(U);
   const zc = d.dot(N);
-  
+
   const xs = camera.fov * xc / zc;
   const ys = camera.fov * yc / zc;
   const S = H / (2 * PP_HEIGHT);
-  
+
   return {
     infinite: false,
     x: W / 2 + xs * S,
@@ -582,21 +721,21 @@ function isFaceFrontFacing(vertices, face, eyePos) {
   const v0 = vertices[face[0]];
   const v1 = vertices[face[1]];
   const v2 = vertices[face[2]];
-  
+
   const edge1 = v1.sub(v0);
   const edge2 = v2.sub(v0);
   const normal = edge1.cross(edge2).normalize();
-  
+
   // Vector from eye to face
   const toFace = v0.sub(eyePos);
-  
+
   return toFace.dot(normal) < 0;
 }
 
 function drawSetupFace(ctx, vertices, face, fillColor) {
   const W = setupCanvas.width;
   const H = setupCanvas.height;
-  
+
   ctx.beginPath();
   let first = true;
   for (let i = 0; i < face.length; i++) {
@@ -617,19 +756,19 @@ function drawSetupFace(ctx, vertices, face, fillColor) {
 function drawSetupProjectedFace(ctx, vertices, face, fillColor) {
   const W = setupCanvas.width;
   const H = setupCanvas.height;
-  
+
   ctx.beginPath();
   let first = true;
   for (let i = 0; i < face.length; i++) {
     const v = vertices[face[i]];
     const camV = toMainCameraSpace(v);
     if (camV.z <= 0.1) return;
-    
+
     // Intersection with picture plane
     const I = eye.add(v.sub(eye).scale(camera.fov / camV.z));
     const s = projectSetup(I, W, H);
     if (!s || !s.visible) return;
-    
+
     if (first) {
       ctx.moveTo(s.x, s.y);
       first = false;
@@ -645,7 +784,7 @@ function drawSetupProjectedFace(ctx, vertices, face, fillColor) {
 function drawPerspectiveFace(ctx, vertices, face, fillColor) {
   const W = perspectiveCanvas.width;
   const H = perspectiveCanvas.height;
-  
+
   ctx.beginPath();
   let first = true;
   for (let i = 0; i < face.length; i++) {
@@ -675,25 +814,25 @@ function projectSetup(pt, W, H) {
     setupDistance * Math.sin(setupPitch) + 0.5,
     setupDistance * Math.cos(setupPitch) * Math.cos(setupYaw)
   );
-  
+
   const setupTarget = new Vector3(0, 0.5, 0);
   const setupN = setupTarget.sub(setupEye).normalize();
   const setupR = setupN.cross(new Vector3(0, 1, 0)).normalize();
   const setupU = setupR.cross(setupN).normalize();
-  
+
   const v = pt.sub(setupEye);
   const xc = v.dot(setupR);
   const yc = v.dot(setupU);
   const zc = v.dot(setupN);
-  
+
   if (zc < 0.1) return null;
-  
+
   const f_setup = 7.0;
   const S_setup = Math.min(W, H) / 2.0;
-  
+
   const xs = f_setup * xc / zc;
   const ys = f_setup * yc / zc;
-  
+
   return {
     x: W / 2 + xs * S_setup,
     y: H / 2 - ys * S_setup,
@@ -709,13 +848,13 @@ function projectSetup(pt, W, H) {
 function drawClippedLine(ctx, p1, p2, color, width, dashed = false) {
   const pc1 = toMainCameraSpace(p1);
   const pc2 = toMainCameraSpace(p2);
-  
+
   // Both behind focal plane, discard
   if (pc1.z <= 0.1 && pc2.z <= 0.1) return;
-  
+
   let c1 = new Vector3(pc1.x, pc1.y, pc1.z);
   let c2 = new Vector3(pc2.x, pc2.y, pc2.z);
-  
+
   // Clip to z = 0.1 plane
   if (c1.z < 0.1) {
     const t = (0.1 - c1.z) / (c2.z - c1.z);
@@ -732,12 +871,12 @@ function drawClippedLine(ctx, p1, p2, color, width, dashed = false) {
       0.1
     );
   }
-  
+
   const W = perspectiveCanvas.width;
   const H = perspectiveCanvas.height;
   const s1 = projectMainCameraSpace(c1, W, H);
   const s2 = projectMainCameraSpace(c2, W, H);
-  
+
   ctx.beginPath();
   ctx.strokeStyle = color;
   ctx.lineWidth = width;
@@ -755,9 +894,9 @@ function drawSetupLine(ctx, p1, p2, color, width, dashed = false) {
   const H = setupCanvas.height;
   const s1 = projectSetup(p1, W, H);
   const s2 = projectSetup(p2, W, H);
-  
+
   if (!s1 || !s2 || !s1.visible || !s2.visible) return;
-  
+
   ctx.beginPath();
   ctx.strokeStyle = color;
   ctx.lineWidth = width;
@@ -775,11 +914,11 @@ function drawSetupLine(ctx, p1, p2, color, width, dashed = false) {
 function drawSetupScene() {
   const W = setupCanvas.width;
   const H = setupCanvas.height;
-  
+
   setupCtx.clearRect(0, 0, W, H);
-  
+
   // Background gradient
-  const grad = setupCtx.createRadialGradient(W/2, H/2, 10, W/2, H/2, Math.max(W, H)/1.5);
+  const grad = setupCtx.createRadialGradient(W / 2, H / 2, 10, W / 2, H / 2, Math.max(W, H) / 1.5);
   grad.addColorStop(0, '#0f111a');
   grad.addColorStop(1, '#06070a');
   setupCtx.fillStyle = grad;
@@ -789,7 +928,7 @@ function drawSetupScene() {
   if (layers.ground) {
     const gridColor = 'rgba(255, 217, 125, 0.12)';
     const centerColor = 'rgba(255, 217, 125, 0.4)';
-    
+
     for (let x = -3; x <= 3; x += 0.5) {
       const isCenter = Math.abs(x) < 0.01;
       drawSetupLine(setupCtx, new Vector3(x, 0, -3), new Vector3(x, 0, 3), isCenter ? centerColor : gridColor, isCenter ? 1.5 : 1);
@@ -883,7 +1022,7 @@ function drawSetupScene() {
   // 5. Draw Picture Plane (Drawing Board)
   const W_p = PP_HEIGHT * (perspectiveCanvas.width / perspectiveCanvas.height);
   const H_p = PP_HEIGHT;
-  
+
   const Cp = eye.add(N.scale(camera.fov)); // Plane Center
   const C0 = Cp.sub(R.scale(W_p)).add(U.scale(H_p)); // Top-Left
   const C1 = Cp.add(R.scale(W_p)).add(U.scale(H_p)); // Top-Right
@@ -906,7 +1045,7 @@ function drawSetupScene() {
     setupCtx.lineTo(s3.x, s3.y);
     setupCtx.closePath();
     setupCtx.fill();
-    
+
     // Draw boundary line
     setupCtx.beginPath();
     setupCtx.strokeStyle = 'rgba(0, 210, 255, 0.5)';
@@ -917,11 +1056,11 @@ function drawSetupScene() {
     setupCtx.lineTo(s3.x, s3.y);
     setupCtx.closePath();
     setupCtx.stroke();
-    
+
     if (layers.labels) {
       setupCtx.fillStyle = 'rgba(0, 210, 255, 0.8)';
       setupCtx.font = '10px Space Grotesk';
-      setupCtx.fillText('Drawing Plane', s0.x + 5, s0.y + 15);
+      setupCtx.fillText(TRANSLATIONS[currentLang].canvasDrawingPlane, s0.x + 5, s0.y + 15);
     }
   }
 
@@ -950,11 +1089,11 @@ function drawSetupScene() {
     const v2 = obj.vertices[edge.b];
     const camV1 = toMainCameraSpace(v1);
     const camV2 = toMainCameraSpace(v2);
-    
+
     if (camV1.z > 0.1 && camV2.z > 0.1) {
       const I1 = eye.add(v1.sub(eye).scale(camera.fov / camV1.z));
       const I2 = eye.add(v2.sub(eye).scale(camera.fov / camV2.z));
-      
+
       if (!edge.isVisible) {
         // Hidden edge projected (Dashed Indigo)
         drawSetupLine(setupCtx, I1, I2, 'rgba(99, 102, 241, 0.8)', 1.2, true);
@@ -975,7 +1114,7 @@ function drawSetupScene() {
     setupCtx.shadowBlur = 8;
     setupCtx.fill();
     setupCtx.shadowBlur = 0; // Reset
-    
+
     setupCtx.strokeStyle = '#fff';
     setupCtx.lineWidth = 1;
     setupCtx.stroke();
@@ -983,7 +1122,7 @@ function drawSetupScene() {
     if (layers.labels) {
       setupCtx.fillStyle = '#f8fafc';
       setupCtx.font = '11px Space Grotesk';
-      setupCtx.fillText('Observer (Eye)', sEye.x + 10, sEye.y - 5);
+      setupCtx.fillText(TRANSLATIONS[currentLang].canvasObserver, sEye.x + 10, sEye.y - 5);
     }
   }
 }
@@ -994,9 +1133,9 @@ function drawSetupScene() {
 function drawPerspectiveScene() {
   const W = perspectiveCanvas.width;
   const H = perspectiveCanvas.height;
-  
+
   perspectiveCtx.clearRect(0, 0, W, H);
-  
+
   // Background
   perspectiveCtx.fillStyle = '#06070a';
   perspectiveCtx.fillRect(0, 0, W, H);
@@ -1018,11 +1157,11 @@ function drawPerspectiveScene() {
     perspectiveCtx.lineTo(W, Y_horizon_pixel);
     perspectiveCtx.stroke();
     perspectiveCtx.setLineDash([]); // Reset
-    
+
     if (layers.labels) {
       perspectiveCtx.fillStyle = 'rgba(0, 210, 255, 0.9)';
       perspectiveCtx.font = '10px Space Grotesk';
-      perspectiveCtx.fillText('HORIZON (EYE LEVEL)', 10, Y_horizon_pixel - 6);
+      perspectiveCtx.fillText(TRANSLATIONS[currentLang].canvasHorizonLabel, 10, Y_horizon_pixel - 6);
     }
   }
 
@@ -1051,17 +1190,17 @@ function drawPerspectiveScene() {
     obj.edges.forEach(edge => {
       const v1 = obj.vertices[edge.a];
       const v2 = obj.vertices[edge.b];
-      
+
       const s1 = projectPerspective(v1, W, H);
       const s2 = projectPerspective(v2, W, H);
-      
+
       if (!s1.visible || !s2.visible) return;
-      
+
       let vp = null;
       if (edge.axis === 'x') vp = vps.x;
       else if (edge.axis === 'y') vp = vps.y;
       else if (edge.axis === 'z') vp = vps.z;
-      
+
       if (vp) {
         // Check if edge is visible relative to eye
         const edgeFaces = obj.faces ? obj.faces.filter(face => face.includes(edge.a) && face.includes(edge.b)) : [];
@@ -1071,7 +1210,7 @@ function drawPerspectiveScene() {
         }
         const alpha = isVisible ? '0.28' : '0.08';
         const infAlpha = isVisible ? '0.18' : '0.05';
-        
+
         if (!vp.infinite) {
           // Draw thin dotted line to vanishing point
           perspectiveCtx.beginPath();
@@ -1089,7 +1228,7 @@ function drawPerspectiveScene() {
           perspectiveCtx.strokeStyle = `rgba(255, 159, 28, ${infAlpha})`;
           perspectiveCtx.lineWidth = 1;
           perspectiveCtx.setLineDash([3, 3]);
-          
+
           if (edge.axis === 'y') {
             // Draw straight vertical lines across the canvas
             perspectiveCtx.moveTo(s1.x, 0);
@@ -1162,13 +1301,17 @@ function drawPerspectiveScene() {
   // 5. Draw Vanishing Points (Circles and Labels)
   if (layers.vanishing) {
     const vpKeys = ['x', 'y', 'z'];
-    const vpLabels = { x: 'Vx (X-Axis)', y: 'Vy (Y-Axis)', z: 'Vz (Z-Axis)' };
-    
+    const vpLabels = {
+      x: TRANSLATIONS[currentLang].vpLabelX,
+      y: TRANSLATIONS[currentLang].vpLabelY,
+      z: TRANSLATIONS[currentLang].vpLabelZ
+    };
+
     vpKeys.forEach(k => {
       const vp = vps[k];
       if (!vp.infinite) {
         const onScreen = vp.x >= 0 && vp.x <= W && vp.y >= 0 && vp.y <= H;
-        
+
         if (onScreen) {
           // Draw standard visible VP node
           perspectiveCtx.beginPath();
@@ -1178,7 +1321,7 @@ function drawPerspectiveScene() {
           perspectiveCtx.shadowBlur = 6;
           perspectiveCtx.fill();
           perspectiveCtx.shadowBlur = 0; // Reset
-          
+
           perspectiveCtx.strokeStyle = '#fff';
           perspectiveCtx.lineWidth = 1;
           perspectiveCtx.stroke();
@@ -1186,7 +1329,13 @@ function drawPerspectiveScene() {
           if (layers.labels) {
             perspectiveCtx.fillStyle = '#fff';
             perspectiveCtx.font = '10px Space Grotesk';
-            perspectiveCtx.fillText(vpLabels[k], vp.x + 8, vp.y - 6);
+            let labelText = vpLabels[k];
+            if (layers.coords) {
+              const rx = Math.round(vp.x - W / 2);
+              const ry = Math.round(H / 2 - vp.y);
+              labelText += ` (${rx}, ${ry})`;
+            }
+            perspectiveCtx.fillText(labelText, vp.x + 8, vp.y - 6);
           }
         } else {
           // VP is offscreen: find where the line from screen center to VP intersects screen boundaries
@@ -1194,48 +1343,96 @@ function drawPerspectiveScene() {
           const cy = H / 2;
           const dx = vp.x - cx;
           const dy = vp.y - cy;
-          
+
           let t = 1.0;
-          
+
           if (dx > 0) { // Right edge
             t = Math.min(t, (W - 12 - cx) / dx);
           } else if (dx < 0) { // Left edge
             t = Math.min(t, (12 - cx) / dx);
           }
-          
+
           if (dy > 0) { // Bottom edge
             t = Math.min(t, (H - 12 - cy) / dy);
           } else if (dy < 0) { // Top edge
             t = Math.min(t, (12 - cy) / dy);
           }
-          
+
           // Compute border intersection coordinate
           const bx = cx + t * dx;
           const by = cy + t * dy;
-          
+
           // Draw tiny arrow pointing offscreen towards VP
           perspectiveCtx.beginPath();
           perspectiveCtx.fillStyle = 'rgba(255, 94, 98, 0.85)';
           perspectiveCtx.arc(bx, by, 3.5, 0, Math.PI * 2);
           perspectiveCtx.fill();
-          
+
           if (layers.labels) {
             perspectiveCtx.fillStyle = 'rgba(255, 255, 255, 0.7)';
             perspectiveCtx.font = '9px Space Grotesk';
-            
+
             // Align label text depending on which side it's pinned to
             let align = 'left';
             let offsetX = 8;
             if (bx > W - 60) { align = 'right'; offsetX = -8; }
             else if (bx < 60) { align = 'left'; offsetX = 8; }
-            
+
             perspectiveCtx.textAlign = align;
-            perspectiveCtx.fillText(`${k.toUpperCase()} direction ➔`, bx + offsetX, by + 3);
+            let labelStr = k === 'x' ? TRANSLATIONS[currentLang].directionArrowX :
+              k === 'y' ? TRANSLATIONS[currentLang].directionArrowY :
+                TRANSLATIONS[currentLang].directionArrowZ;
+            if (layers.coords) {
+              const rx = Math.round(vp.x - W / 2);
+              const ry = Math.round(H / 2 - vp.y);
+              labelStr = labelStr.replace('➔', `(${rx}, ${ry}) ➔`);
+            }
+            perspectiveCtx.fillText(labelStr, bx + offsetX, by + 3);
             perspectiveCtx.textAlign = 'left'; // Reset
           }
         }
       }
     });
+  }
+
+  // 6. Draw Coordinates overlay (center origin crosshair & vertex coordinates)
+  if (layers.coords) {
+    perspectiveCtx.fillStyle = '#f43f5e'; // Coordinates label color (Rose)
+    perspectiveCtx.font = '9px Space Grotesk';
+    
+    // 6a. Render vertices coordinates
+    obj.vertices.forEach((v, idx) => {
+      const s = projectPerspective(v, W, H);
+      if (s.visible) {
+        const rx = Math.round(s.x - W / 2);
+        const ry = Math.round(H / 2 - s.y);
+        
+        // Draw tiny dot at vertex
+        perspectiveCtx.beginPath();
+        perspectiveCtx.arc(s.x, s.y, 2.5, 0, Math.PI * 2);
+        perspectiveCtx.fill();
+        
+        // Draw text label: e.g. "v0 (-50, 120)"
+        perspectiveCtx.fillText(`v${idx} (${rx}, ${ry})`, s.x + 6, s.y - 4);
+      }
+    });
+    
+    // 6b. Render Center of Canvas Origin O(0, 0)
+    const cx = W / 2;
+    const cy = H / 2;
+    perspectiveCtx.strokeStyle = 'rgba(244, 63, 94, 0.5)';
+    perspectiveCtx.lineWidth = 1;
+    
+    // Draw crosshair
+    perspectiveCtx.beginPath();
+    perspectiveCtx.moveTo(cx - 6, cy);
+    perspectiveCtx.lineTo(cx + 6, cy);
+    perspectiveCtx.moveTo(cx, cy - 6);
+    perspectiveCtx.lineTo(cx, cy + 6);
+    perspectiveCtx.stroke();
+    
+    // Draw O (0,0) label
+    perspectiveCtx.fillText('O (0, 0)', cx + 8, cy + 12);
   }
 }
 
@@ -1253,29 +1450,31 @@ function updateExplainer() {
   const badge = document.getElementById('explainer-type-badge');
   const title = document.getElementById('explainer-title');
   const text = document.getElementById('explainer-text');
-  
+
   // Criteria checks for alignment
   const isYawZero = Math.abs(camera.yaw % 90) < 1.5 || Math.abs(camera.yaw % 90 - 90) < 1.5 || Math.abs(camera.yaw % 90 + 90) < 1.5;
   const isPitchZero = Math.abs(camera.pitch) < 1.5;
-  
+
+  const dict = TRANSLATIONS[currentLang];
+
   if (isYawZero && isPitchZero) {
-    badge.innerText = '1-Point Perspective';
+    badge.innerText = dict.explainer1ptBadge;
     badge.className = 'explainer-mode-badge';
     badge.style.background = '#6366f1'; // Indigo
-    title.innerText = 'One-Point Perspective';
-    text.innerText = 'The camera is level (pitch = 0°) and aligned perpendicular to one set of faces of the cube (yaw = 0° or 90°). Only one vanishing point exists, located at the center of vision. Horizontal and vertical lines remain perfectly parallel to the drawing plane and never converge.';
+    title.innerText = dict.explainer1ptTitle;
+    text.innerText = dict.explainer1ptText;
   } else if (!isYawZero && isPitchZero) {
-    badge.innerText = '2-Point Perspective';
+    badge.innerText = dict.explainer2ptBadge;
     badge.className = 'explainer-mode-badge';
     badge.style.background = '#00d2ff'; // Cyan
-    title.innerText = 'Two-Point Perspective';
-    text.innerText = 'The camera is level (pitch = 0°) but rotated at an angle around the object (yaw is non-zero). Two vanishing points appear on the horizon line (representing depth and width lines converging). Vertical lines remain parallel and straight.';
+    title.innerText = dict.explainer2ptTitle;
+    text.innerText = dict.explainer2ptText;
   } else {
-    badge.innerText = '3-Point Perspective';
+    badge.innerText = dict.explainer3ptBadge;
     badge.className = 'explainer-mode-badge';
     badge.style.background = '#ff5e62'; // Pink
-    title.innerText = 'Three-Point Perspective';
-    text.innerText = 'The camera is looking up or down (pitch is non-zero) and rotated around the object. All three sets of parallel lines (width, height, depth) are oblique to the picture plane, and each converges to a separate vanishing point (V1, V2, and a vertical V3).';
+    title.innerText = dict.explainer3ptTitle;
+    text.innerText = dict.explainer3ptText;
   }
 }
 
@@ -1283,14 +1482,14 @@ function highlightPresetButtons() {
   const btn1 = document.getElementById('btn-1pt');
   const btn2 = document.getElementById('btn-2pt');
   const btn3 = document.getElementById('btn-3pt');
-  
+
   btn1.classList.remove('active');
   btn2.classList.remove('active');
   btn3.classList.remove('active');
-  
+
   const isYawZero = Math.abs(camera.yaw % 90) < 1.5 || Math.abs(camera.yaw % 90 - 90) < 1.5 || Math.abs(camera.yaw % 90 + 90) < 1.5;
   const isPitchZero = Math.abs(camera.pitch) < 1.5;
-  
+
   if (isYawZero && isPitchZero) {
     btn1.classList.add('active');
   } else if (!isYawZero && isPitchZero) {
@@ -1320,7 +1519,7 @@ function applyPreset(mode) {
     camera.distance = 10.0;
     camera.fov = 3.2;
   }
-  
+
   updateUI();
   updateCameraBasis();
   updateExplainer();
@@ -1331,16 +1530,16 @@ function applyPreset(mode) {
 function updateUI() {
   document.getElementById('slider-yaw').value = Math.round(camera.yaw);
   document.getElementById('val-yaw').innerText = `${Math.round(camera.yaw)}°`;
-  
+
   document.getElementById('slider-pitch').value = Math.round(camera.pitch);
   document.getElementById('val-pitch').innerText = `${Math.round(camera.pitch)}°`;
-  
+
   document.getElementById('slider-height').value = camera.height.toFixed(1);
   document.getElementById('val-height').innerText = camera.height.toFixed(1);
-  
+
   document.getElementById('slider-distance').value = camera.distance.toFixed(1);
   document.getElementById('val-distance').innerText = camera.distance.toFixed(1);
-  
+
   document.getElementById('slider-fov').value = camera.fov.toFixed(1);
   document.getElementById('val-fov').innerText = camera.fov.toFixed(1);
 }
@@ -1396,9 +1595,10 @@ function initEvents() {
     'chk-orthogonals': 'orthogonals',
     'chk-rays': 'rays',
     'chk-ground': 'ground',
-    'chk-labels': 'labels'
+    'chk-labels': 'labels',
+    'chk-coords': 'coords'
   };
-  
+
   Object.keys(toggleMap).forEach(id => {
     document.getElementById(id).addEventListener('change', (e) => {
       layers[toggleMap[id]] = e.target.checked;
@@ -1417,6 +1617,10 @@ function initEvents() {
   document.getElementById('btn-2pt').addEventListener('click', () => applyPreset('2pt'));
   document.getElementById('btn-3pt').addEventListener('click', () => applyPreset('3pt'));
 
+  // Language switcher buttons
+  document.getElementById('btn-lang-en').addEventListener('click', () => switchLanguage('en'));
+  document.getElementById('btn-lang-zh').addEventListener('click', () => switchLanguage('zh'));
+
   // Window Resize
   window.addEventListener('resize', handleResize);
 
@@ -1433,10 +1637,10 @@ function initEvents() {
     if (isDraggingSetup) {
       const dx = e.clientX - prevMousePos.x;
       const dy = e.clientY - prevMousePos.y;
-      
+
       setupYaw -= dx * 0.007;
-      setupPitch = Math.max(-Math.PI/2.3, Math.min(Math.PI/2.3, setupPitch + dy * 0.007));
-      
+      setupPitch = Math.max(-Math.PI / 2.3, Math.min(Math.PI / 2.3, setupPitch + dy * 0.007));
+
       prevMousePos = { x: e.clientX, y: e.clientY };
       draw();
     }
@@ -1458,10 +1662,10 @@ function initEvents() {
     if (isDraggingSetup && e.touches.length === 1) {
       const dx = e.touches[0].clientX - prevMousePos.x;
       const dy = e.touches[0].clientY - prevMousePos.y;
-      
+
       setupYaw -= dx * 0.008;
-      setupPitch = Math.max(-Math.PI/2.3, Math.min(Math.PI/2.3, setupPitch + dy * 0.008));
-      
+      setupPitch = Math.max(-Math.PI / 2.3, Math.min(Math.PI / 2.3, setupPitch + dy * 0.008));
+
       prevMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
       draw();
     }
@@ -1484,15 +1688,15 @@ function initEvents() {
     if (isDraggingPersp) {
       const dx = e.clientX - prevPerspMouse.x;
       const dy = e.clientY - prevPerspMouse.y;
-      
+
       camera.yaw += dx * 0.35;
       if (camera.yaw > 180) camera.yaw -= 360;
       if (camera.yaw < -180) camera.yaw += 360;
-      
+
       camera.pitch = Math.max(-85, Math.min(85, camera.pitch - dy * 0.35));
-      
+
       prevPerspMouse = { x: e.clientX, y: e.clientY };
-      
+
       updateUI();
       updateCameraBasis();
       updateExplainer();
@@ -1517,15 +1721,15 @@ function initEvents() {
     if (isDraggingPersp && e.touches.length === 1) {
       const dx = e.touches[0].clientX - prevPerspMouse.x;
       const dy = e.touches[0].clientY - prevPerspMouse.y;
-      
+
       camera.yaw += dx * 0.35;
       if (camera.yaw > 180) camera.yaw -= 360;
       if (camera.yaw < -180) camera.yaw += 360;
-      
+
       camera.pitch = Math.max(-85, Math.min(85, camera.pitch - dy * 0.35));
-      
+
       prevPerspMouse = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-      
+
       updateUI();
       updateCameraBasis();
       updateExplainer();
@@ -1541,21 +1745,112 @@ function initEvents() {
 
 function handleResize() {
   const dpr = window.devicePixelRatio || 1;
-  
+
   // Set setup canvas dimensions
   const setupRect = setupCanvas.parentElement.getBoundingClientRect();
   setupCanvas.width = setupRect.width * dpr;
   setupCanvas.height = setupRect.height * dpr;
   setupCanvas.style.width = `${setupRect.width}px`;
   setupCanvas.style.height = `${setupRect.height}px`;
-  
+
   // Set perspective canvas dimensions
   const perspectiveRect = perspectiveCanvas.parentElement.getBoundingClientRect();
   perspectiveCanvas.width = perspectiveRect.width * dpr;
   perspectiveCanvas.height = perspectiveRect.height * dpr;
   perspectiveCanvas.style.width = `${perspectiveRect.width}px`;
   perspectiveCanvas.style.height = `${perspectiveRect.height}px`;
-  
+
+  draw();
+}
+
+// ==========================================
+// Language Switcher Logic
+// ==========================================
+function switchLanguage(lang) {
+  if (lang !== 'en' && lang !== 'zh') lang = 'en';
+  currentLang = lang;
+  localStorage.setItem('perspective_lab_lang', lang);
+
+  // Update document language attribute
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+
+  // Update button active state
+  const btnEn = document.getElementById('btn-lang-en');
+  const btnZh = document.getElementById('btn-lang-zh');
+  if (btnEn && btnZh) {
+    if (lang === 'en') {
+      btnEn.classList.add('active');
+      btnZh.classList.remove('active');
+    } else {
+      btnEn.classList.remove('active');
+      btnZh.classList.add('active');
+    }
+  }
+
+  const dict = TRANSLATIONS[lang];
+
+  // Update document title
+  document.title = dict.title;
+
+  // Update HTML elements text content
+  document.getElementById('header-subtitle').innerText = dict.subtitle;
+  document.getElementById('setup-badge').innerText = dict.setupBadge;
+  document.getElementById('setup-title').innerText = dict.setupTitle;
+  document.getElementById('setup-desc').innerText = dict.setupDesc;
+  document.getElementById('setup-hint').innerText = dict.setupHint;
+
+  document.getElementById('persp-badge').innerText = dict.perspBadge;
+  document.getElementById('persp-title').innerText = dict.perspTitle;
+  document.getElementById('persp-desc').innerText = dict.perspDesc;
+
+  document.getElementById('controls-title').innerText = dict.controlsTitle;
+  document.getElementById('label-object-select').innerText = dict.labelChooseObject;
+
+  // Update object selection options text content
+  const select = document.getElementById('object-select');
+  if (select) {
+    const optionKeys = ['cube', 'chair', 'house', 'column', 'triPrism', 'railroad', 'stairs'];
+    const dictOptionKeys = ['objectCube', 'objectChair', 'objectHouse', 'objectColumn', 'objectPrism', 'objectRailroad', 'objectStairs'];
+    for (let i = 0; i < optionKeys.length; i++) {
+      const opt = select.querySelector(`option[value="${optionKeys[i]}"]`);
+      if (opt) {
+        opt.innerText = dict[dictOptionKeys[i]];
+      }
+    }
+  }
+
+  document.getElementById('label-presets').innerText = dict.labelPresets;
+  document.getElementById('btn-1pt').innerText = dict.btn1pt;
+  document.getElementById('btn-2pt').innerText = dict.btn2pt;
+  document.getElementById('btn-3pt').innerText = dict.btn3pt;
+
+  document.getElementById('label-yaw').innerText = dict.labelYaw;
+  document.getElementById('label-pitch').innerText = dict.labelPitch;
+  document.getElementById('label-height').innerText = dict.labelHeight;
+  document.getElementById('label-distance').innerText = dict.labelDistance;
+  document.getElementById('label-fov').innerText = dict.labelFov;
+
+  document.getElementById('toggles-title').innerText = dict.togglesTitle;
+  document.getElementById('lbl-horizon').innerText = dict.lblHorizon;
+  document.getElementById('lbl-vanishing').innerText = dict.lblVanishing;
+  document.getElementById('lbl-orthogonals').innerText = dict.lblOrthogonals;
+  document.getElementById('lbl-rays').innerText = dict.lblRays;
+  document.getElementById('lbl-ground').innerText = dict.lblGround;
+  document.getElementById('lbl-labels').innerText = dict.lblLabels;
+  document.getElementById('lbl-coords').innerText = dict.lblCoords;
+
+  document.getElementById('leg-horizon').innerText = dict.legHorizon;
+  document.getElementById('leg-vanishing').innerText = dict.legVanishing;
+  document.getElementById('leg-orthogonals').innerText = dict.legOrthogonals;
+  document.getElementById('leg-wireframe').innerText = dict.legWireframe;
+  document.getElementById('leg-hidden').innerText = dict.legHidden;
+  document.getElementById('leg-rays').innerText = dict.legRays;
+  document.getElementById('leg-coords').innerText = dict.legCoords;
+
+  document.getElementById('footer-text').innerHTML = dict.footerText;
+
+  // Re-draw setup/perspective and update explainer card texts
+  updateExplainer();
   draw();
 }
 
@@ -1567,9 +1862,8 @@ function init() {
   handleResize();
   updateCameraBasis();
   updateUI();
-  updateExplainer();
+  switchLanguage(currentLang);
   highlightPresetButtons();
-  draw();
 }
 
 // Trigger initial setup on load

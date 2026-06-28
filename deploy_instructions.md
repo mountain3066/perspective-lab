@@ -1,6 +1,6 @@
-# PerspectiveLab - Simple Deployment & Usage Instructions
+# DrawingPerspectiveLab - Simple Deployment & Usage Instructions
 
-This document explains how to run the PerspectiveLab application locally or publish it online for others to use. Because the application is a lightweight, static web app (pure HTML, CSS, and JavaScript), it requires **no installations**, **no databases**, and **no server setup** to run!
+This document explains how to run the DrawingPerspectiveLab application locally or publish it online for others to use. Because the application is a lightweight, static web app (pure HTML, CSS, and JavaScript), it requires **no installations**, **no databases**, and **no server setup** to run!
 
 ---
 

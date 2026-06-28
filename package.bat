@@ -1,6 +1,6 @@
 @echo off
 echo ===================================================
-echo Packaging PerspectiveLab for Deployment
+echo Packaging DrawingPerspectiveLab for Deployment
 echo ===================================================
 echo.
 echo Removing old package if it exists...
