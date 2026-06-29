@@ -88,6 +88,7 @@ const TRANSLATIONS = {
     objectPrism: "5. Prism",
     objectRailroad: "6. Railroad Track",
     objectStairs: "7. Staircase",
+    objectPlate: "8. Decorated Plate",
     labelPresets: "Perspective Presets",
     btn1pt: "1-Point",
     btn2pt: "2-Point",
@@ -153,6 +154,7 @@ const TRANSLATIONS = {
     objectPrism: "5. 三棱柱",
     objectRailroad: "6. 铁轨",
     objectStairs: "7. 楼梯",
+    objectPlate: "8. 装饰圆盘",
     labelPresets: "透视模式预设",
     btn1pt: "单点透视",
     btn2pt: "两点透视",
@@ -597,6 +599,93 @@ const OBJECTS = {
     fcs.push([11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]);
     // 6. Right profile wall (X-max normal, facing right)
     fcs.push([12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]);
+
+    return { vertices: verts, edges: eds, faces: fcs };
+  })(),
+  plate: (() => {
+    const verts = [];
+    const eds = [];
+    const fcs = [];
+
+    const segments = 16;
+    const R_plate = 0.8;
+    const H_plate = 0.08;
+
+    // 1. Plate bottom circle (Y = 0)
+    for (let i = 0; i < segments; i++) {
+      const theta = (i * 2 * Math.PI) / segments;
+      verts.push(new Vector3(R_plate * Math.sin(theta), 0.0, R_plate * Math.cos(theta)));
+    }
+
+    // 2. Plate top circle (Y = H_plate)
+    for (let i = 0; i < segments; i++) {
+      const theta = (i * 2 * Math.PI) / segments;
+      verts.push(new Vector3(R_plate * Math.sin(theta), H_plate, R_plate * Math.cos(theta)));
+    }
+
+    // Plate edges
+    for (let i = 0; i < segments; i++) {
+      const next = (i + 1) % segments;
+      // Bottom ring
+      eds.push({ a: i, b: next, axis: 'other' });
+      // Top ring
+      eds.push({ a: i + segments, b: next + segments, axis: 'other' });
+      // Vertical rim lines
+      eds.push({ a: i, b: i + segments, axis: 'y' });
+    }
+
+    // Plate faces
+    // Side faces (outward CCW winding)
+    for (let i = 0; i < segments; i++) {
+      const next = (i + 1) % segments;
+      fcs.push([i, next, next + segments, i + segments]);
+    }
+    // Bottom face (CCW winding looking up from bottom)
+    const bottomFace = [];
+    for (let i = segments - 1; i >= 0; i--) {
+      bottomFace.push(i);
+    }
+    fcs.push(bottomFace);
+    // Top face of plate (CCW winding looking down)
+    const topFace = [];
+    for (let i = 0; i < segments; i++) {
+      topFace.push(i + segments);
+    }
+    fcs.push(topFace);
+
+    // 3. Add 16 small circles along the edge of the plate top
+    const numCircles = 16;
+    const R_center = 0.68; // center radius of the small circles
+    const r_circle = 0.06; // radius of each small circle
+    const circleSegments = 8; // vertices per small circle
+
+    for (let c = 0; c < numCircles; c++) {
+      const theta = (c * 2 * Math.PI) / numCircles;
+      const cx = R_center * Math.sin(theta);
+      const cz = R_center * Math.cos(theta);
+      const cy = H_plate + 0.002; // slightly elevated to avoid Z-fighting
+
+      const startIdx = verts.length;
+
+      // Create vertices for this small circle
+      for (let j = 0; j < circleSegments; j++) {
+        const phi = (j * 2 * Math.PI) / circleSegments;
+        const vx = cx + r_circle * Math.sin(phi);
+        const vz = cz + r_circle * Math.cos(phi);
+        verts.push(new Vector3(vx, cy, vz));
+      }
+
+      // Create edges for this small circle
+      const faceIndices = [];
+      for (let j = 0; j < circleSegments; j++) {
+        const next = (j + 1) % circleSegments;
+        eds.push({ a: startIdx + j, b: startIdx + next, axis: 'other' });
+        faceIndices.push(startIdx + j);
+      }
+
+      // Create face for this small circle (drawn CCW on top)
+      fcs.push(faceIndices);
+    }
 
     return { vertices: verts, edges: eds, faces: fcs };
   })()
@@ -1809,8 +1898,8 @@ function switchLanguage(lang) {
   // Update object selection options text content
   const select = document.getElementById('object-select');
   if (select) {
-    const optionKeys = ['cube', 'chair', 'house', 'column', 'triPrism', 'railroad', 'stairs'];
-    const dictOptionKeys = ['objectCube', 'objectChair', 'objectHouse', 'objectColumn', 'objectPrism', 'objectRailroad', 'objectStairs'];
+    const optionKeys = ['cube', 'chair', 'house', 'column', 'triPrism', 'railroad', 'stairs', 'plate'];
+    const dictOptionKeys = ['objectCube', 'objectChair', 'objectHouse', 'objectColumn', 'objectPrism', 'objectRailroad', 'objectStairs', 'objectPlate'];
     for (let i = 0; i < optionKeys.length; i++) {
       const opt = select.querySelector(`option[value="${optionKeys[i]}"]`);
       if (opt) {
